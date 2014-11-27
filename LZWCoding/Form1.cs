@@ -26,7 +26,7 @@ namespace LZWCoding
                 textBox1.Text = openFileDialog1.FileName;
             try
             {
-                StreamReader sr1 = new StreamReader(textBox1.Text);
+                StreamReader sr1 = new StreamReader(textBox1.Text, Encoding.Default);
                 textBox2.Text = sr1.ReadToEnd();
             }
             catch( Exception ex ) {}
