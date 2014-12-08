@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace LZWDecoder
 {
     class LZW_Decode
     {
         private string input = string.Empty;
-        public LZW_Decode( Dictionary<string, int> dictionary, string output)
+        private string path = string.Empty;
+        public LZW_Decode( Dictionary<string, int> dictionary, string output, string path)
         {
-            decoder(dictionary, output);
+            decoder(dictionary, output, path);
         }
         ~LZW_Decode() { }
         public string getInput
         {
             get { return input; }
         }
-        public string decoder( Dictionary<string, int> dictionary, string output )
+        public string decoder( Dictionary<string, int> dictionary, string output, string path )
         {
             List<string> codeWord = output.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             int preValue = 0;
@@ -29,8 +31,8 @@ namespace LZWDecoder
             {
                 nowKey = FindKey(dictionary, Convert.ToInt16(oneCodeWord));
                 preKey = FindKey(dictionary, preValue);
-                if (preKey.Equals("error")) { preKey = string.Empty; }
-                if (nowKey.Equals("error")) 
+                if (preKey.Equals("error")) { preKey = string.Empty; }  //一開始時遇到的問題
+                if (nowKey.Equals("error"))     //遇到abababababab......這種狀況
                 {
                     nowKey = preKey;
                     input += preKey + preKey.Substring( 0, 1 );
@@ -43,6 +45,15 @@ namespace LZWDecoder
                     dictionary.Add( newKey, dictionary.Count() + 1 );
                 }
                 preValue = Convert.ToInt16(oneCodeWord);
+                using (StreamWriter sw = new StreamWriter(path + @"\DecodeDictionary.txt", true, Encoding.Default))
+                {
+                    sw.WriteLine("Now is " + oneCodeWord);
+                    foreach (KeyValuePair<string, int> show in dictionary)
+                    {
+                        sw.WriteLine(show.Key + "  " + show.Value);
+                    }
+                    sw.WriteLine();
+                }
             }
 
             return input;

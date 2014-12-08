@@ -10,7 +10,7 @@ namespace LZWEncoder
     {
         private Dictionary<string, int> InitDictionary = new Dictionary<string, int>();
         private string output = string.Empty;
-        public LZW_Encode( string Content )
+        public LZW_Encode( string Content, string path )
         {
             Dictionary<string, int> dictionary = new Dictionary<string, int>();
             List<char> ContentChar = Content.ToList();
@@ -20,7 +20,7 @@ namespace LZWEncoder
                 dictionary = bulidDictionary(dictionary, ecahWord.ToString());
             }
             InitDictionary = new Dictionary<string, int>(dictionary);
-            encoder(dictionary, Content);
+            encoder(dictionary, Content, path);
         }
         ~LZW_Encode() { }
 
@@ -42,7 +42,7 @@ namespace LZWEncoder
             return dictionary;
         }
 
-        private string encoder( Dictionary<string, int> dictionary, string Content)
+        private string encoder( Dictionary<string, int> dictionary, string Content, string path)
         {
             int pointer = 0;
             string oneWord = string.Empty;
@@ -64,7 +64,15 @@ namespace LZWEncoder
                     bulidDictionary(dictionary, oneWord);
                     pointer--;
                 }
-
+                using (StreamWriter sw = new StreamWriter(path + @"\EncodeDictionary.txt", true, Encoding.Default))
+                {
+                    sw.WriteLine("Now is " + Content[pointer - 1]);
+                    foreach (KeyValuePair<string, int> show in dictionary)
+                    {
+                        sw.WriteLine(show.Key + "  " + show.Value);
+                    }
+                    sw.WriteLine();
+                }
             }
             return output;
         }
