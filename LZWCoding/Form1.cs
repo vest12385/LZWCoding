@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -24,13 +25,19 @@ namespace LZWCoding
             openFileDialog1.FileName = "";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 textBox1.Text = openFileDialog1.FileName;
-            try
+            //textBox.Text.Substring(textBox1.Text.LastIndexOf(@"\") + 1, textBox1.Text.Count() - textBox1.Text.LastIndexOf(@"\") - 1)
+            if (!Regex.IsMatch(textBox1.Text, @"^*.txt$"))
+                MessageBox.Show("請輸入附檔名為.txt的檔案");
+            else
             {
-                StreamReader sr1 = new StreamReader(textBox1.Text, Encoding.Default);
-                textBox2.Text = sr1.ReadToEnd();
-                textBox4.Text = textBox1.Text.Substring( 0, textBox1.Text.LastIndexOf(@"\") );
+                try
+                {
+                    StreamReader sr1 = new StreamReader(textBox1.Text, Encoding.Default);
+                    textBox2.Text = sr1.ReadToEnd();
+                    textBox4.Text = textBox1.Text.Substring(0, textBox1.Text.LastIndexOf(@"\"));
+                }
+                catch (Exception ex) { }
             }
-            catch( Exception ex ) {}
         }
 
         private void button2_Click(object sender, EventArgs e)
