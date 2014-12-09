@@ -22,14 +22,15 @@ namespace LZWCoding
         private void button1_Click(object sender, EventArgs e)
         {
             //讀取檔案位址(need OpenFileDialog)
+            openFileDialog1.Filter = "txt文檔(*.txt)|*.txt";         //(名稱),|(可看見的副檔名);
             openFileDialog1.FileName = "";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 textBox1.Text = openFileDialog1.FileName;
             //textBox.Text.Substring(textBox1.Text.LastIndexOf(@"\") + 1, textBox1.Text.Count() - textBox1.Text.LastIndexOf(@"\") - 1)
-            if (!Regex.IsMatch(textBox1.Text, @"^*.txt$"))
-                MessageBox.Show("請輸入附檔名為.txt的檔案");
-            else
-            {
+            //if (!Regex.IsMatch(textBox1.Text, @"^*.txt$"))
+            //    MessageBox.Show("請輸入附檔名為.txt的檔案");
+            //else
+            //{
                 try
                 {
                     StreamReader sr1 = new StreamReader(textBox1.Text, Encoding.Default);
@@ -37,7 +38,7 @@ namespace LZWCoding
                     textBox4.Text = textBox1.Text.Substring(0, textBox1.Text.LastIndexOf(@"\"));
                 }
                 catch (Exception ex) { }
-            }
+            //}
         }
 
         private void button2_Click(object sender, EventArgs e)
